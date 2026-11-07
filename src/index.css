@@ -177,4 +177,29 @@
     box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.3),
       0 8px 30px -8px rgba(56, 189, 248, 0.5);
   }
+
+  /* رسومات الواجهة: حركة عائمة وتوهج خفيف بدل الصور الجامدة */
+  .icon-art {
+    filter: drop-shadow(0 10px 18px rgba(56, 189, 248, 0.16));
+    transform-origin: center;
+  }
+  .icon-art-float {
+    animation: iconFloat 3.8s ease-in-out infinite, iconGlow 2.8s ease-in-out infinite;
+  }
+  .icon-art:hover,
+  button:hover .icon-art {
+    filter: drop-shadow(0 12px 28px rgba(129, 140, 248, 0.38));
+  }
+  @keyframes iconFloat {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-7px) rotate(1deg); }
+  }
+  @keyframes iconGlow {
+    0%, 100% { opacity: 0.86; }
+    50% { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .icon-art-float { animation: none; }
+  }
 }

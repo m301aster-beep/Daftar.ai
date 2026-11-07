@@ -99,11 +99,11 @@ export default function Sidebar({ active, onSelect, isOpen, onClose }) {
                 {isActive && (
                   <span className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-7 rounded-l-full bg-gradient-to-b from-sky-400 to-iris-400" />
                 )}
-                <span className="relative flex h-7 w-7 shrink-0 items-center justify-center">
+                <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/[0.03] transition-transform duration-300 group-hover:scale-110">
                   <img
                     src={`${sectionImages[item.id]}?v=48febf2`}
                     alt=""
-                    className="h-7 w-7 object-contain opacity-90 transition group-hover:scale-110"
+                    className="icon-art icon-art-float h-11 w-11 object-contain opacity-95 transition group-hover:scale-125"
                     onError={(event) => {
                       event.currentTarget.style.display = "none";
                       event.currentTarget.nextElementSibling?.classList.remove("hidden");

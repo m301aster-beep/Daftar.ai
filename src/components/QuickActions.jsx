@@ -31,11 +31,11 @@ export default function QuickActions({ onPick }) {
               <div className="absolute -bottom-8 -left-8 w-20 h-20 bg-sky-500/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative">
                 <div className="w-9 h-9 rounded-lg bg-ink-700/80 border border-white/5 flex items-center justify-center mb-3 group-hover:bg-sky-500/15 group-hover:border-sky-400/20 transition">
-                  <span className="relative flex h-7 w-7 items-center justify-center">
+                  <span className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03]">
                     <img
                       src={`${imageMap[action.id]}?v=48febf2`}
                       alt=""
-                      className="h-7 w-7 object-contain"
+                      className="icon-art icon-art-float h-14 w-14 object-contain transition duration-300 group-hover:scale-125"
                       onError={(event) => {
                         event.currentTarget.style.display = "none";
                         event.currentTarget.nextElementSibling?.classList.remove("hidden");

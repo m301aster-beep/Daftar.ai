@@ -82,9 +82,10 @@ export default function TeacherTools({ onOpen, language = "ar" }) {
     <section className="space-y-5">
       <div className="relative overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-l from-sky-500/10 via-ink-800/70 to-ink-800/50 p-5 sm:p-6">
         <div className="absolute -left-10 -top-16 h-40 w-40 rounded-full bg-sky-500/10 blur-3xl" />
-        <div className="relative flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-300">
-            <BrainCircuit className="h-6 w-6" />
+        <div className="relative flex items-center gap-4">
+          <div className="relative flex h-32 w-32 shrink-0 items-center justify-center rounded-[2rem] bg-sky-500/10 shadow-[0_0_45px_rgba(56,189,248,0.16)]">
+            <img src="./icons/ai-studio.png?v=48febf2" alt="" className="icon-art icon-art-float h-32 w-32 object-contain" />
+            <BrainCircuit className="absolute h-6 w-6 text-sky-300/80" />
           </div>
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-sky-300">{isEnglish ? "Teacher Tools Hub" : "مركز أدوات المدرس"}</span>
