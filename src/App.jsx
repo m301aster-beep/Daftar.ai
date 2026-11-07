@@ -9,6 +9,7 @@ import StudentsTable from "@/components/StudentsTable";
 import AutomationPanel from "@/components/AutomationPanel";
 import TeacherTools from "@/components/TeacherTools";
 import { Sparkles, ArrowLeft, GraduationCap } from "lucide-react";
+import { getLanguage, translations } from "@/lib/i18n";
 
 // عناوين الأقسام
 const titles = {
@@ -32,6 +33,8 @@ export default function App() {
   const [seedTopic, setSeedTopic] = useState("");
   // مفتاح لإجبار الاستوديو على إعادة التهيئة عند تبديل الأداة
   const [studioKey, setStudioKey] = useState(0);
+  const [language, setLanguage] = useState(getLanguage);
+  const pageTitles = translations[language].titles;
 
   // اختصار لوحة المفاتيح لفتح البحث (Cmd/Ctrl + K)
   useEffect(() => {
@@ -44,6 +47,14 @@ export default function App() {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, []);
+
+  useEffect(() => {
+    const onLanguageChange = (event) => setLanguage(event.detail);
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    window.addEventListener("teacherai-language-change", onLanguageChange);
+    return () => window.removeEventListener("teacherai-language-change", onLanguageChange);
+  }, [language]);
 
   // عند اختيار أداة من بطاقات الوصول السريع
   const handlePickTool = (action) => {
@@ -85,7 +96,7 @@ export default function App() {
         <Navbar
           onMenuClick={() => setSidebarOpen(true)}
           onSearchClick={() => setSearchOpen(true)}
-          title={titles[active] || "لوحة التحكم"}
+          title={pageTitles[active] || pageTitles.dashboard}
         />
 
         <main className="flex-1 overflow-y-auto">
@@ -172,7 +183,7 @@ export default function App() {
             {/* ====== مركز أدوات المدرس ====== */}
             {active === "tools" && (
               <div className="animate-fade-in-up">
-                <TeacherTools onOpen={handleOpenTeacherTool} />
+                <TeacherTools onOpen={handleOpenTeacherTool} language={language} />
               </div>
             )}
 
@@ -236,7 +247,7 @@ export default function App() {
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sky-500/15 to-iris-500/15 border border-white/5 flex items-center justify-center mb-4">
                   <Sparkles className="w-7 h-7 text-sky-400" />
                 </div>
-                <h2 className="text-lg font-bold text-white">{titles[active]}</h2>
+                <h2 className="text-lg font-bold text-white">{pageTitles[active]}</h2>
                 <p className="text-sm text-slate-400 mt-1.5">
                   هذا القسم قيد التطوير — قريباً بإذن الله.
                 </p>

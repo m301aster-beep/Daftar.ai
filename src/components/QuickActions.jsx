@@ -2,10 +2,10 @@ import { ArrowLeft } from "lucide-react";
 import { quickActions } from "@/data/mockData";
 
 const imageMap = {
-  exam: "/icons/ai-studio.png",
-  lesson: "/icons/dashboard.png",
-  worksheet: "/icons/students.png",
-  homework: "/icons/students.png",
+  exam: "./icons/ai-studio.png",
+  lesson: "./icons/dashboard.png",
+  worksheet: "./icons/students.png",
+  homework: "./icons/students.png",
 };
 
 /** بطاقات الوصول السريع للأدوات التعليمية الثلاث + الواجب المنزلي */

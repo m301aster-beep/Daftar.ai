@@ -1,15 +1,17 @@
-import { Sparkles, GraduationCap, X, HelpCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Sparkles, GraduationCap, X, HelpCircle, Languages } from "lucide-react";
 import { navItems } from "@/data/mockData";
+import { getLanguage, setLanguage, translations } from "@/lib/i18n";
 
 const sectionImages = {
-  dashboard: "/icons/dashboard.png",
-  generator: "/icons/ai-studio.png",
-  tools: "/icons/ai-studio.png",
-  students: "/icons/students.png",
-  archive: "/icons/dashboard.png",
-  automation: "/icons/automation.png",
-  reports: "/icons/automation.png",
-  settings: "/icons/dashboard.png",
+  dashboard: "./icons/dashboard.png",
+  generator: "./icons/ai-studio.png",
+  tools: "./icons/ai-studio.png",
+  students: "./icons/students.png",
+  archive: "./icons/dashboard.png",
+  automation: "./icons/automation.png",
+  reports: "./icons/automation.png",
+  settings: "./icons/dashboard.png",
 };
 
 /**
@@ -17,6 +19,17 @@ const sectionImages = {
  * يدعم وضع الموبايل (يُمرّر isOpen + onClose من الأب).
  */
 export default function Sidebar({ active, onSelect, isOpen, onClose }) {
+  const [language, setCurrentLanguage] = useState(getLanguage);
+  const t = translations[language];
+
+  useEffect(() => {
+    const onLanguageChange = (event) => setCurrentLanguage(event.detail);
+    window.addEventListener("teacherai-language-change", onLanguageChange);
+    return () => window.removeEventListener("teacherai-language-change", onLanguageChange);
+  }, []);
+
+  const toggleLanguage = () => setLanguage(language === "ar" ? "en" : "ar");
+
   return (
     <>
       {/* خلفية معتمة على الموبايل */}
@@ -87,7 +100,7 @@ export default function Sidebar({ active, onSelect, isOpen, onClose }) {
                   <span className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-7 rounded-l-full bg-gradient-to-b from-sky-400 to-iris-400" />
                 )}
                 <img src={sectionImages[item.id]} alt="" className="h-7 w-7 object-contain opacity-90 transition group-hover:scale-110" />
-                <span>{item.label}</span>
+                <span>{t.nav[item.id] || item.label}</span>
                 {item.id === "generator" && (
                   <span className="mr-auto text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-iris-500/20 text-iris-400">
                     AI
@@ -116,7 +129,12 @@ export default function Sidebar({ active, onSelect, isOpen, onClose }) {
             </div>
           </div>
 
-          <button className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition">
+          <button onClick={toggleLanguage} className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-sky-300 bg-sky-500/5 border border-sky-400/10 hover:bg-sky-500/10 transition">
+            <Languages className="w-4 h-4" />
+            {t.switchLanguage}
+          </button>
+
+          <button className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition">
             <HelpCircle className="w-4 h-4" />
             مركز المساعدة
           </button>
