@@ -60,3 +60,14 @@ export function setLanguage(language) {
   document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
   window.dispatchEvent(new CustomEvent("teacherai-language-change", { detail: language }));
 }
+
+export function getTheme() {
+  if (typeof window === "undefined") return "light";
+  return window.localStorage.getItem("teacherai-theme") || "light";
+}
+
+export function setTheme(theme) {
+  window.localStorage.setItem("teacherai-theme", theme);
+  document.documentElement.dataset.theme = theme;
+  window.dispatchEvent(new CustomEvent("teacherai-theme-change", { detail: theme }));
+}

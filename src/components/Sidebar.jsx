@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Sparkles, GraduationCap, X, HelpCircle, Languages } from "lucide-react";
+import { Sparkles, GraduationCap, X, HelpCircle, Languages, Moon, Sun } from "lucide-react";
 import { navItems } from "@/data/mockData";
-import { getLanguage, setLanguage, translations } from "@/lib/i18n";
+import { getLanguage, setLanguage, translations, getTheme, setTheme } from "@/lib/i18n";
 
 const sectionImages = {
   dashboard: "./icons/cropped/dashboard.png",
@@ -20,12 +20,18 @@ const sectionImages = {
  */
 export default function Sidebar({ active, onSelect, isOpen, onClose }) {
   const [language, setCurrentLanguage] = useState(getLanguage);
+  const [theme, setCurrentTheme] = useState(getTheme);
   const t = translations[language];
 
   useEffect(() => {
     const onLanguageChange = (event) => setCurrentLanguage(event.detail);
+    const onThemeChange = (event) => setCurrentTheme(event.detail);
     window.addEventListener("teacherai-language-change", onLanguageChange);
-    return () => window.removeEventListener("teacherai-language-change", onLanguageChange);
+    window.addEventListener("teacherai-theme-change", onThemeChange);
+    return () => {
+      window.removeEventListener("teacherai-language-change", onLanguageChange);
+      window.removeEventListener("teacherai-theme-change", onThemeChange);
+    };
   }, []);
 
   const toggleLanguage = () => setLanguage(language === "ar" ? "en" : "ar");
@@ -143,6 +149,11 @@ export default function Sidebar({ active, onSelect, isOpen, onClose }) {
           <button onClick={toggleLanguage} className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-sky-300 bg-sky-500/5 border border-sky-400/10 hover:bg-sky-500/10 transition">
             <Languages className="w-4 h-4" />
             {t.switchLanguage}
+          </button>
+
+          <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-500 border border-slate-300/30 hover:text-sky-500 transition">
+            {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            {theme === "dark" ? (language === "ar" ? "الوضع الفاتح" : "Light mode") : (language === "ar" ? "الخلفية الداكنة" : "Dark mode")}
           </button>
 
           <button className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition">

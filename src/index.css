@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   * {
@@ -16,8 +16,8 @@
   body {
     margin: 0;
     padding: 0;
-    background-color: #0a0e1a;
-    color: #e6e9ef;
+    background-color: #f4f8fc;
+    color: #1e293b;
     font-family: "IBM Plex Sans Arabic", "Tajawal", system-ui, -apple-system,
       sans-serif;
   }
@@ -223,4 +223,56 @@
   @media (prefers-reduced-motion: reduce) {
     .icon-art-float { animation: none; }
   }
+
+  /* نمط فاتح: لا نستخدم الأسود كخلفية، وتبقى الألوان الداكنة للنصوص الضرورية فقط */
+  body {
+    background-color: #f4f8fc !important;
+  }
+  .bg-ink-950 { background-color: #eef5fb !important; }
+  .bg-ink-900 { background-color: transparent !important; }
+  .bg-ink-850 { background-color: rgba(255, 255, 255, 0.72) !important; }
+  .bg-ink-800 { background-color: rgba(255, 255, 255, 0.62) !important; }
+  .bg-ink-750 { background-color: rgba(255, 255, 255, 0.82) !important; }
+  .bg-ink-700 { background-color: rgba(226, 232, 240, 0.58) !important; }
+  .bg-ink-600 { background-color: #cbd5e1 !important; }
+  .bg-grid {
+    background-image: radial-gradient(circle at 1px 1px, rgba(30, 64, 90, 0.08) 1px, transparent 0);
+  }
+  .text-white { color: #172033 !important; }
+  .text-slate-100 { color: #1e293b !important; }
+  .text-slate-200 { color: #334155 !important; }
+  .text-slate-300 { color: #475569 !important; }
+  .text-slate-400 { color: #64748b !important; }
+  .text-slate-500 { color: #7c8da1 !important; }
+  .text-slate-600 { color: #94a3b8 !important; }
+  .border-white\/5,
+  .border-white\/10,
+  .border-white\/\[0\.05\] {
+    border-color: rgba(148, 163, 184, 0.22) !important;
+  }
+  .shadow-card {
+    box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 18px 36px -26px rgba(71, 85, 105, 0.35) !important;
+  }
+
+  /* الخلفية السوداء اختيارية من زر النمط داخل القائمة */
+  html[data-theme="dark"] body { background-color: #0a0e1a !important; color: #e6e9ef; }
+  html[data-theme="dark"] .bg-ink-950 { background-color: #060912 !important; }
+  html[data-theme="dark"] .bg-ink-900 { background-color: #0a0e1a !important; }
+  html[data-theme="dark"] .bg-ink-850 { background-color: #0d1320 !important; }
+  html[data-theme="dark"] .bg-ink-800 { background-color: #111827 !important; }
+  html[data-theme="dark"] .bg-ink-750 { background-color: #161f31 !important; }
+  html[data-theme="dark"] .bg-ink-700 { background-color: #1c2638 !important; }
+  html[data-theme="dark"] .bg-grid {
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0);
+  }
+  html[data-theme="dark"] .text-white { color: #fff !important; }
+  html[data-theme="dark"] .text-slate-100 { color: #e6e9ef !important; }
+  html[data-theme="dark"] .text-slate-200 { color: #cbd5e1 !important; }
+  html[data-theme="dark"] .text-slate-300 { color: #94a3b8 !important; }
+  html[data-theme="dark"] .text-slate-400 { color: #94a3b8 !important; }
+  html[data-theme="dark"] .text-slate-500 { color: #64748b !important; }
+  html[data-theme="dark"] .border-white\/5,
+  html[data-theme="dark"] .border-white\/10,
+  html[data-theme="dark"] .border-white\/\[0\.05\] { border-color: rgba(255,255,255,0.08) !important; }
+  html[data-theme="dark"] .shadow-card { box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 40px -24px rgba(0,0,0,0.6) !important; }
 }

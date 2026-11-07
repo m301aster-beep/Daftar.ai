@@ -9,7 +9,7 @@ import StudentsTable from "@/components/StudentsTable";
 import AutomationPanel from "@/components/AutomationPanel";
 import TeacherTools from "@/components/TeacherTools";
 import { Sparkles, ArrowLeft, GraduationCap } from "lucide-react";
-import { getLanguage, translations } from "@/lib/i18n";
+import { getLanguage, translations, getTheme } from "@/lib/i18n";
 
 // عناوين الأقسام
 const titles = {
@@ -34,6 +34,7 @@ export default function App() {
   // مفتاح لإجبار الاستوديو على إعادة التهيئة عند تبديل الأداة
   const [studioKey, setStudioKey] = useState(0);
   const [language, setLanguage] = useState(getLanguage);
+  const [theme, setTheme] = useState(getTheme);
   const pageTitles = translations[language].titles;
 
   // اختصار لوحة المفاتيح لفتح البحث (Cmd/Ctrl + K)
@@ -50,11 +51,17 @@ export default function App() {
 
   useEffect(() => {
     const onLanguageChange = (event) => setLanguage(event.detail);
+    const onThemeChange = (event) => setTheme(event.detail);
     document.documentElement.lang = language;
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+    document.documentElement.dataset.theme = theme;
     window.addEventListener("teacherai-language-change", onLanguageChange);
-    return () => window.removeEventListener("teacherai-language-change", onLanguageChange);
-  }, [language]);
+    window.addEventListener("teacherai-theme-change", onThemeChange);
+    return () => {
+      window.removeEventListener("teacherai-language-change", onLanguageChange);
+      window.removeEventListener("teacherai-theme-change", onThemeChange);
+    };
+  }, [language, theme]);
 
   // عند اختيار أداة من بطاقات الوصول السريع
   const handlePickTool = (action) => {
