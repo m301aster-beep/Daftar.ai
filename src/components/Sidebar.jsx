@@ -99,7 +99,18 @@ export default function Sidebar({ active, onSelect, isOpen, onClose }) {
                 {isActive && (
                   <span className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-7 rounded-l-full bg-gradient-to-b from-sky-400 to-iris-400" />
                 )}
-                <img src={sectionImages[item.id]} alt="" className="h-7 w-7 object-contain opacity-90 transition group-hover:scale-110" />
+                <span className="relative flex h-7 w-7 shrink-0 items-center justify-center">
+                  <img
+                    src={`${sectionImages[item.id]}?v=48febf2`}
+                    alt=""
+                    className="h-7 w-7 object-contain opacity-90 transition group-hover:scale-110"
+                    onError={(event) => {
+                      event.currentTarget.style.display = "none";
+                      event.currentTarget.nextElementSibling?.classList.remove("hidden");
+                    }}
+                  />
+                  <span className="hidden text-lg text-sky-300" aria-hidden="true">✦</span>
+                </span>
                 <span>{t.nav[item.id] || item.label}</span>
                 {item.id === "generator" && (
                   <span className="mr-auto text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-iris-500/20 text-iris-400">

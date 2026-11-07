@@ -31,7 +31,18 @@ export default function QuickActions({ onPick }) {
               <div className="absolute -bottom-8 -left-8 w-20 h-20 bg-sky-500/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative">
                 <div className="w-9 h-9 rounded-lg bg-ink-700/80 border border-white/5 flex items-center justify-center mb-3 group-hover:bg-sky-500/15 group-hover:border-sky-400/20 transition">
-                  <img src={imageMap[action.id]} alt="" className="h-7 w-7 object-contain" />
+                  <span className="relative flex h-7 w-7 items-center justify-center">
+                    <img
+                      src={`${imageMap[action.id]}?v=48febf2`}
+                      alt=""
+                      className="h-7 w-7 object-contain"
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                        event.currentTarget.nextElementSibling?.classList.remove("hidden");
+                      }}
+                    />
+                    <span className="hidden text-lg text-sky-300" aria-hidden="true">✦</span>
+                  </span>
                 </div>
                 <h4 className="text-sm font-bold text-white mb-1">{action.title}</h4>
                 <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2">
