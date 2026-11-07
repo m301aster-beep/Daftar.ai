@@ -2,10 +2,10 @@ import { ArrowLeft } from "lucide-react";
 import { quickActions } from "@/data/mockData";
 
 const imageMap = {
-  exam: "./icons/animated/ai-studio.gif",
-  lesson: "./icons/animated/dashboard.gif",
-  worksheet: "./icons/animated/students.gif",
-  homework: "./icons/animated/students.gif",
+  exam: "./icons/cropped/ai-studio.png",
+  lesson: "./icons/cropped/dashboard.png",
+  worksheet: "./icons/cropped/students.png",
+  homework: "./icons/cropped/students.png",
 };
 
 /** بطاقات الوصول السريع للأدوات التعليمية الثلاث + الواجب المنزلي */
@@ -25,29 +25,26 @@ export default function QuickActions({ onPick }) {
             <button
               key={action.id}
               onClick={() => onPick(action)}
-              className="group text-right relative overflow-hidden rounded-2xl bg-ink-800/60 border border-white/5 p-4 hover:border-sky-400/30 hover:bg-ink-750/60 transition-all duration-300 animate-fade-in-up"
+              className="group relative flex min-h-[190px] flex-col items-center justify-center overflow-hidden rounded-2xl bg-ink-800/60 border border-white/5 p-4 text-center hover:border-sky-400/30 hover:bg-ink-750/60 transition-all duration-300 animate-fade-in-up"
               style={{ animationDelay: `${i * 60}ms` }}
             >
               <div className="absolute -bottom-8 -left-8 w-20 h-20 bg-sky-500/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative">
-                <div className="w-9 h-9 rounded-lg bg-ink-700/80 border border-white/5 flex items-center justify-center mb-3 group-hover:bg-sky-500/15 group-hover:border-sky-400/20 transition">
-                  <span className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03]">
+              <div className="relative flex flex-col items-center">
+                <div className="mb-2 flex h-28 w-28 items-center justify-center">
+                  <span className="relative mb-2 flex h-28 w-28 items-center justify-center">
                     <img
-                      src={`${imageMap[action.id]}?v=48febf2`}
+                      src={`${imageMap[action.id]}?v=cropped1`}
                       alt=""
-                      className="icon-art icon-art-float h-14 w-14 object-contain transition duration-300 group-hover:scale-125"
+                      className="icon-art icon-art-float h-28 w-28 object-contain transition duration-300 group-hover:scale-110"
                       onError={(event) => {
                         event.currentTarget.style.display = "none";
                         event.currentTarget.nextElementSibling?.classList.remove("hidden");
                       }}
                     />
-                    <span className="hidden text-lg text-sky-300" aria-hidden="true">✦</span>
+                    <span className="hidden text-3xl text-sky-300" aria-hidden="true">✦</span>
                   </span>
                 </div>
-                <h4 className="text-sm font-bold text-white mb-1">{action.title}</h4>
-                <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2">
-                  {action.desc}
-                </p>
+                <h4 className="text-base font-extrabold text-white">{action.title}</h4>
               </div>
             </button>
           );

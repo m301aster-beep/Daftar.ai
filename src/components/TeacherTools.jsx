@@ -84,7 +84,7 @@ export default function TeacherTools({ onOpen, language = "ar" }) {
         <div className="absolute -left-10 -top-16 h-40 w-40 rounded-full bg-sky-500/10 blur-3xl" />
         <div className="relative flex items-center gap-4">
           <div className="relative flex h-32 w-32 shrink-0 items-center justify-center rounded-[2rem] bg-sky-500/10 shadow-[0_0_45px_rgba(56,189,248,0.16)]">
-            <img src="./icons/animated/ai-studio.gif?v=animated1" alt="" className="icon-art icon-art-float h-32 w-32 object-contain" />
+            <img src="./icons/cropped/ai-studio.png?v=cropped1" alt="" className="icon-art icon-art-float h-32 w-32 object-contain" />
             <BrainCircuit className="absolute h-6 w-6 text-sky-300/80" />
           </div>
           <div>

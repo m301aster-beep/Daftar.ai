@@ -4,14 +4,14 @@ import { navItems } from "@/data/mockData";
 import { getLanguage, setLanguage, translations } from "@/lib/i18n";
 
 const sectionImages = {
-  dashboard: "./icons/animated/dashboard.gif",
-  generator: "./icons/animated/ai-studio.gif",
-  tools: "./icons/animated/ai-studio.gif",
-  students: "./icons/animated/students.gif",
-  archive: "./icons/animated/dashboard.gif",
-  automation: "./icons/animated/automation.gif",
-  reports: "./icons/animated/automation.gif",
-  settings: "./icons/animated/dashboard.gif",
+  dashboard: "./icons/cropped/dashboard.png",
+  generator: "./icons/cropped/ai-studio.png",
+  tools: "./icons/cropped/ai-studio.png",
+  students: "./icons/cropped/students.png",
+  archive: "./icons/cropped/dashboard.png",
+  automation: "./icons/cropped/automation.png",
+  reports: "./icons/cropped/automation.png",
+  settings: "./icons/cropped/dashboard.png",
 };
 
 /**
