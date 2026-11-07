@@ -38,6 +38,17 @@ class MainActivity : AppCompatActivity() {
                 if (request.isForMainFrame && remotePageAttempted) loadLocalApp()
                 super.onReceivedError(view, request, error)
             }
+
+            override fun onReceivedHttpError(
+                view: WebView,
+                request: android.webkit.WebResourceRequest,
+                errorResponse: android.webkit.WebResourceResponse
+            ) {
+                if (request.isForMainFrame && remotePageAttempted && errorResponse.statusCode >= 400) {
+                    loadLocalApp()
+                }
+                super.onReceivedHttpError(view, request, errorResponse)
+            }
         }
         webView.webChromeClient = WebChromeClient()
 
