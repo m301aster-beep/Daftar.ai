@@ -4,6 +4,7 @@
 export const navItems = [
   { id: "dashboard", label: "لوحة التحكم", icon: "LayoutDashboard" },
   { id: "generator", label: "الاستوديو الذكي", icon: "Sparkles" },
+  { id: "tools", label: "أدوات المدرس", icon: "BrainCircuit" },
   { id: "students", label: "الطلاب", icon: "Users" },
   { id: "archive", label: "الأرشيف", icon: "FolderOpen" },
   { id: "automation", label: "الأتمتة", icon: "Workflow" },

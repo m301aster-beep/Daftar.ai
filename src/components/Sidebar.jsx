@@ -1,28 +1,15 @@
-import {
-  LayoutDashboard,
-  Sparkles,
-  Users,
-  FileText,
-  FolderOpen,
-  Workflow,
-  BarChart3,
-  Settings,
-  GraduationCap,
-  X,
-  HelpCircle,
-} from "lucide-react";
+import { Sparkles, GraduationCap, X, HelpCircle } from "lucide-react";
 import { navItems } from "@/data/mockData";
 
-// خريطة الأيقونات لتحويل الأسماء النصية إلى مكونات
-const iconMap = {
-  LayoutDashboard,
-  Sparkles,
-  Users,
-  FileText,
-  FolderOpen,
-  Workflow,
-  BarChart3,
-  Settings,
+const sectionImages = {
+  dashboard: "/icons/dashboard.png",
+  generator: "/icons/ai-studio.png",
+  tools: "/icons/ai-studio.png",
+  students: "/icons/students.png",
+  archive: "/icons/dashboard.png",
+  automation: "/icons/automation.png",
+  reports: "/icons/automation.png",
+  settings: "/icons/dashboard.png",
 };
 
 /**
@@ -79,7 +66,6 @@ export default function Sidebar({ active, onSelect, isOpen, onClose }) {
             القائمة الرئيسية
           </p>
           {navItems.map((item) => {
-            const Icon = iconMap[item.icon] || LayoutDashboard;
             const isActive = active === item.id;
             return (
               <button
@@ -100,15 +86,7 @@ export default function Sidebar({ active, onSelect, isOpen, onClose }) {
                 {isActive && (
                   <span className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-7 rounded-l-full bg-gradient-to-b from-sky-400 to-iris-400" />
                 )}
-                <Icon
-                  className={[
-                    "w-[18px] h-[18px] shrink-0 transition",
-                    isActive
-                      ? "text-sky-400"
-                      : "text-slate-500 group-hover:text-slate-300",
-                  ].join(" ")}
-                  strokeWidth={2}
-                />
+                <img src={sectionImages[item.id]} alt="" className="h-7 w-7 object-contain opacity-90 transition group-hover:scale-110" />
                 <span>{item.label}</span>
                 {item.id === "generator" && (
                   <span className="mr-auto text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-iris-500/20 text-iris-400">

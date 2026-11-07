@@ -7,12 +7,14 @@ import AIStudio from "@/components/AIStudio";
 import SearchEngineModal from "@/components/SearchEngineModal";
 import StudentsTable from "@/components/StudentsTable";
 import AutomationPanel from "@/components/AutomationPanel";
+import TeacherTools from "@/components/TeacherTools";
 import { Sparkles, ArrowLeft, GraduationCap } from "lucide-react";
 
 // عناوين الأقسام
 const titles = {
   dashboard: "لوحة التحكم",
   generator: "الاستوديو الذكي",
+  tools: "أدوات المدرس",
   students: "إدارة الطلاب",
   archive: "أرشيف الدروس",
   automation: "الأتمتة المجدولة",
@@ -54,6 +56,18 @@ export default function App() {
   const handlePickSeedTopic = (topic) => {
     setSeedTopic(topic);
     setActive("generator");
+  };
+
+  const handleOpenTeacherTool = (tool) => {
+    if (["exam", "lesson", "worksheet"].includes(tool.id)) {
+      handlePickTool({ toolId: tool.id });
+      return;
+    }
+    if (["students", "reports"].includes(tool.id)) {
+      setActive(tool.id);
+      return;
+    }
+    setActive("tools");
   };
 
   return (
@@ -152,6 +166,13 @@ export default function App() {
                   seedTopic={seedTopic}
                   onConsumeSeed={() => setSeedTopic("")}
                 />
+              </div>
+            )}
+
+            {/* ====== مركز أدوات المدرس ====== */}
+            {active === "tools" && (
+              <div className="animate-fade-in-up">
+                <TeacherTools onOpen={handleOpenTeacherTool} />
               </div>
             )}
 
