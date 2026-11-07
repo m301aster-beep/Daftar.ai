@@ -235,6 +235,15 @@
   .bg-ink-750 { background-color: rgba(255, 255, 255, 0.82) !important; }
   .bg-ink-700 { background-color: rgba(226, 232, 240, 0.58) !important; }
   .bg-ink-600 { background-color: #cbd5e1 !important; }
+  html:not([data-theme="dark"]) [class*="bg-ink-"] {
+    background-color: rgba(255, 255, 255, 0.68) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  html:not([data-theme="dark"]) .bg-ink-900,
+  html:not([data-theme="dark"]) .bg-ink-950 {
+    background-color: transparent !important;
+  }
   .bg-grid {
     background-image: radial-gradient(circle at 1px 1px, rgba(30, 64, 90, 0.08) 1px, transparent 0);
   }

@@ -1,10 +1,19 @@
-import { Menu, Search, Bell, Plus, Command } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, Search, Bell, Plus, Command, Moon, Sun } from "lucide-react";
+import { getTheme, setTheme } from "@/lib/i18n";
 
 /**
  * الشريط العلوي: زر القائمة للموبايل، البحث الفوري،
  * الإشعارات، وزر الإنشاء السريع، وصورة الملف الشخصي.
  */
 export default function Navbar({ onMenuClick, onSearchClick, title }) {
+  const [theme, setCurrentTheme] = useState(getTheme);
+  useEffect(() => {
+    const onThemeChange = (event) => setCurrentTheme(event.detail);
+    window.addEventListener("teacherai-theme-change", onThemeChange);
+    return () => window.removeEventListener("teacherai-theme-change", onThemeChange);
+  }, []);
+
   return (
     <header className="sticky top-0 z-20 bg-ink-900/70 backdrop-blur-xl border-b border-white/5">
       <div className="flex items-center gap-3 px-4 sm:px-6 h-16">
@@ -43,6 +52,15 @@ export default function Navbar({ onMenuClick, onSearchClick, title }) {
         <button className="relative p-2.5 rounded-xl bg-ink-800/70 border border-white/5 text-slate-300 hover:text-white hover:border-white/10 transition">
           <Bell className="w-[18px] h-[18px]" />
           <span className="absolute top-2 left-2 w-2 h-2 rounded-full bg-sky-400 animate-pulse-dot" />
+        </button>
+
+        <button
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-ink-800/70 border border-white/5 text-slate-500 hover:text-sky-500 hover:border-sky-400/30 transition"
+          aria-label={theme === "dark" ? "تفعيل النهار" : "تفعيل الليل"}
+          title={theme === "dark" ? "الوضع النهاري" : "الوضع الليلي"}
+        >
+          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </button>
 
         {/* إنشاء سريع */}
