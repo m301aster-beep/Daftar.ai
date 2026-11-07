@@ -21,4 +21,21 @@ cd android
 ./gradlew bundleRelease
 ```
 
-يتم إنشاء APK وAAB تلقائيًا عبر GitHub Actions عند الدفع إلى فرع `main` أو عند تشغيل Workflow يدويًا.
+## التوقيع والإصدار
+
+يستخدم GitHub Actions أربعة أسرار مستودع لبناء النسخ الموقعة:
+
+- `ANDROID_KEYSTORE_BASE64`
+- `ANDROID_KEYSTORE_PASSWORD`
+- `ANDROID_KEY_ALIAS`
+- `ANDROID_KEY_PASSWORD`
+
+عند دفع tag بصيغة `v1.0.0` يتم إنشاء GitHub Release تلقائيًا وإرفاق `app-release.apk` و`app-release.aab`.
+
+## تحديث الواجهة هوائيًا
+
+ينشر Workflow مجلد `dist` على GitHub Pages. التطبيق يحاول تحميل الواجهة من:
+
+`https://m301aster-beep.github.io/Daftar.ai/`
+
+وبذلك تظهر تحديثات React للمستخدمين دون إصدار Android جديد. إذا لم يتوفر الإنترنت، يعود التطبيق تلقائيًا إلى نسخة React المحلية المضمّنة داخل APK.

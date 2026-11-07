@@ -13,6 +13,7 @@ import androidx.webkit.WebViewFeature
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
+    private var remotePageAttempted = false
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +29,15 @@ class MainActivity : AppCompatActivity() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 return request.url.scheme !in setOf("https", "http", "file", "about")
             }
+
+            override fun onReceivedError(
+                view: WebView,
+                request: android.webkit.WebResourceRequest,
+                error: android.webkit.WebResourceError
+            ) {
+                if (request.isForMainFrame && remotePageAttempted) loadLocalApp()
+                super.onReceivedError(view, request, error)
+            }
         }
         webView.webChromeClient = WebChromeClient()
 
@@ -35,7 +45,13 @@ class MainActivity : AppCompatActivity() {
             WebSettingsCompat.setForceDark(webView.settings, WebSettingsCompat.FORCE_DARK_OFF)
         }
 
-        webView.loadUrl("file:///android_asset/web/index.html")
+        val remoteUrl = BuildConfig.UI_URL.trim()
+        if (remoteUrl.isNotEmpty()) {
+            remotePageAttempted = true
+            webView.loadUrl(remoteUrl)
+        } else {
+            loadLocalApp()
+        }
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -47,5 +63,10 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         webView.destroy()
         super.onDestroy()
+    }
+
+    private fun loadLocalApp() {
+        remotePageAttempted = false
+        webView.loadUrl("file:///android_asset/web/index.html")
     }
 }

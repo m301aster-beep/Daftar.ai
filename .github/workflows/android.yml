@@ -1,16 +1,51 @@
-name: Android build
+name: Build, sign and release Android
 
 on:
   push:
     branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
+jobs:
+  web:
+    name: Build React UI and deploy OTA web app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install web dependencies
+        run: npm ci
+
+      - name: Build React UI
+        run: npm run build
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload UI to Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy UI to GitHub Pages
+        uses: actions/deploy-pages@v4
+
+  android:
+    name: Build signed APK and AAB
+    runs-on: ubuntu-latest
+    needs: web
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,17 +66,55 @@ jobs:
       - name: Install web dependencies
         run: npm ci
 
-      - name: Build React assets
+      - name: Build React assets for offline fallback
         run: npm run build
 
-      - name: Build Android APK and AAB
-        working-directory: android
-        run: gradle assembleDebug bundleRelease --no-daemon
+      - name: Prepare Android WebView assets
+        run: npm run android:prepare
 
-      - name: Upload Android artifacts
+      - name: Decode release keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: echo "$KEYSTORE_BASE64" | base64 --decode > android/release.keystore
+
+      - name: Set Android version
+        id: version
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            VERSION_NAME="${GITHUB_REF_NAME#v}"
+          else
+            VERSION_NAME="1.0.${GITHUB_RUN_NUMBER}"
+          fi
+          VERSION_CODE=$((GITHUB_RUN_NUMBER + 1))
+          echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
+          echo "version_code=$VERSION_CODE" >> "$GITHUB_OUTPUT"
+
+      - name: Build signed APK and AAB
+        working-directory: android
+        env:
+          ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/android/release.keystore
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          UI_URL: https://m301aster-beep.github.io/Daftar.ai/
+          VERSION_NAME: ${{ steps.version.outputs.version_name }}
+          VERSION_CODE: ${{ steps.version.outputs.version_code }}
+        run: gradle assembleRelease bundleRelease --no-daemon
+
+      - name: Upload signed artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: daftar-ai-android
+          name: daftar-ai-${{ steps.version.outputs.version_name }}
           path: |
-            android/app/build/outputs/apk/debug/app-debug.apk
+            android/app/build/outputs/apk/release/app-release.apk
+            android/app/build/outputs/bundle/release/app-release.aab
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            android/app/build/outputs/apk/release/app-release.apk
             android/app/build/outputs/bundle/release/app-release.aab

@@ -7,17 +7,36 @@ android {
     namespace = "ai.daftar.app"
     compileSdk = 35
 
+    val releaseKeystore = file(System.getenv("ANDROID_KEYSTORE_PATH") ?: "release.keystore")
+    val hasReleaseSigning = releaseKeystore.exists() &&
+        !System.getenv("ANDROID_KEYSTORE_PASSWORD").isNullOrBlank() &&
+        !System.getenv("ANDROID_KEY_ALIAS").isNullOrBlank() &&
+        !System.getenv("ANDROID_KEY_PASSWORD").isNullOrBlank()
+
     defaultConfig {
         applicationId = "ai.daftar.app"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = (System.getenv("VERSION_CODE") ?: "1").toInt()
+        versionName = System.getenv("VERSION_NAME") ?: "1.0.0"
+        buildConfigField("String", "UI_URL", "\"${System.getenv("UI_URL") ?: ""}\"")
+    }
+
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = releaseKeystore
+                storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = if (hasReleaseSigning) signingConfigs.getByName("release") else signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
