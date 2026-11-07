@@ -25,6 +25,12 @@
   body {
     min-height: 100vh;
     overflow-x: hidden;
+    background: transparent;
+  }
+
+  #root {
+    min-height: 100vh;
+    background: transparent;
   }
 
   /* تمرير أنيق */
@@ -62,6 +68,21 @@
         transparent 0
       );
     background-size: 32px 32px;
+  }
+
+  /* خلفية شفافة زجاجية حتى تظهر الرسومات والشبكة خلف المحتوى */
+  .bg-ink-900 {
+    background-color: transparent !important;
+  }
+  .bg-ink-800\/60,
+  .bg-ink-800\/55,
+  .bg-ink-800\/50,
+  .bg-ink-800\/70,
+  .bg-ink-850\/40,
+  .bg-ink-850\/50 {
+    background-color: rgba(15, 23, 42, 0.28) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
 
   /* تدرّج لوني ناعم */
