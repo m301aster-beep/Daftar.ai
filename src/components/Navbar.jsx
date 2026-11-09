@@ -6,7 +6,7 @@ import { getTheme, setTheme } from "@/lib/i18n";
  * الشريط العلوي: زر القائمة للموبايل، البحث الفوري،
  * الإشعارات، وزر الإنشاء السريع، وصورة الملف الشخصي.
  */
-export default function Navbar({ onMenuClick, onSearchClick, title }) {
+export default function Navbar({ onMenuClick, onSearchClick, title, profile, onLogout }) {
   const [theme, setCurrentTheme] = useState(getTheme);
   useEffect(() => {
     const onThemeChange = (event) => setCurrentTheme(event.detail);
@@ -31,7 +31,7 @@ export default function Navbar({ onMenuClick, onSearchClick, title }) {
           <h2 className="font-display font-bold text-base text-white tracking-tight">
             {title}
           </h2>
-          <p className="text-[11px] text-slate-500">مرحباً بعودتك، أ. عبدالله</p>
+          <p className="text-[11px] text-slate-500">مرحباً بعودتك، {profile?.name || "أيها المعلم"}</p>
         </div>
 
         {/* شريط البحث الفوري */}
@@ -70,9 +70,9 @@ export default function Navbar({ onMenuClick, onSearchClick, title }) {
         </button>
 
         {/* صورة الملف الشخصي */}
-        <button className="relative shrink-0">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500 to-iris-500 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/10 hover:ring-sky-400/40 transition">
-            ع
+        <button className="relative shrink-0" onClick={onLogout} title="تسجيل الخروج">
+          <div className="w-9 h-9 overflow-hidden rounded-xl bg-gradient-to-br from-sky-500 to-iris-500 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/10 hover:ring-sky-400/40 transition">
+            {profile?.picture ? <img src={profile.picture} alt={profile.name || "المعلم"} className="w-full h-full object-cover" /> : (profile?.name || "م").charAt(0)}
           </div>
           <span className="absolute -bottom-0.5 -left-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-ink-900" />
         </button>

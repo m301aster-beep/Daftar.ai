@@ -81,10 +81,13 @@ function StatCard({ stat, index }) {
 }
 
 /** شبكة الإحصائيات السريعة في أعلى لوحة التحكم */
-export default function DashboardStats() {
+export default function DashboardStats({ remoteStats } = {}) {
+  const cards = remoteStats
+    ? stats.map((stat) => ({ ...stat, value: remoteStats[stat.id] ?? stat.value, change: "متصل" }))
+    : stats;
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {stats.map((s, i) => (
+      {cards.map((s, i) => (
         <StatCard key={s.id} stat={s} index={i} />
       ))}
     </div>

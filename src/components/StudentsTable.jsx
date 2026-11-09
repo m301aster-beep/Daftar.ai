@@ -24,11 +24,19 @@ const statusIcon = {
 };
 
 /** جدول الطلاب مع تتبع التقدّم والنتائج */
-export default function StudentsTable() {
+export default function StudentsTable({ data } = {}) {
   const [page, setPage] = useState(1);
   const perPage = 5;
-  const totalPages = Math.ceil(students.length / perPage);
-  const pageItems = students.slice((page - 1) * perPage, page * perPage);
+  const rows = data?.length ? data.map((student) => ({
+    ...student,
+    level: student.level || "متوسط",
+    progress: student.progress ?? 0,
+    lastQuiz: student.lastQuiz || "لم يبدأ بعد",
+    score: student.score ?? 0,
+    status: student.status || "active",
+  })) : students;
+  const totalPages = Math.max(1, Math.ceil(rows.length / perPage));
+  const pageItems = rows.slice((page - 1) * perPage, page * perPage);
 
   return (
     <div className="rounded-2xl bg-ink-800/50 border border-white/5 shadow-card overflow-hidden">
@@ -145,8 +153,8 @@ export default function StudentsTable() {
       {/* ترقيم الصفحات */}
       <div className="flex items-center justify-between px-5 py-3 border-t border-white/5">
         <p className="text-[11px] text-slate-500">
-          عرض {(page - 1) * perPage + 1}–{Math.min(page * perPage, students.length)} من{" "}
-          {students.length}
+          عرض {(page - 1) * perPage + 1}–{Math.min(page * perPage, rows.length)} من{" "}
+          {rows.length}
         </p>
         <div className="flex items-center gap-1">
           <button
