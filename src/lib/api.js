@@ -44,6 +44,14 @@ export async function signInWithGoogle(credential) {
   return saveSession(response);
 }
 
+export async function signInWithFirebase(token, user) {
+  const response = await apiRequest("/api/auth/firebase", {
+    method: "POST",
+    body: JSON.stringify({ token, user: { name: user.displayName, email: user.email, picture: user.photoURL } }),
+  });
+  return saveSession(response);
+}
+
 export async function loadTeacherData() {
   const [dashboard, students] = await Promise.all([
     apiRequest("/api/dashboard"),
