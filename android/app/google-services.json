@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "668388767870",
+    "project_id": "master-40cd2",
+    "storage_bucket": "master-40cd2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668388767870:android:65fd7cd456f554dbcc802f",
+        "android_client_info": {
+          "package_name": "ai.daftar.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcHUvbVTM_noiIQd5GZKYX6DEarMQCfBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

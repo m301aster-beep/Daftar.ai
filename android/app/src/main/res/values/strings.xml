@@ -1,0 +1,4 @@
+<resources>
+    <!-- يُستبدل بالقيمة التي ينشئها Firebase بعد إضافة SHA-1/SHA-256 -->
+    <string name="default_web_client_id">ضع_web_client_id_من_Firebase_هنا</string>
+</resources>
