@@ -2,13 +2,14 @@ import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 
+// Firebase Web settings are public client configuration; env vars override them for staging.
 const config = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDcHUvbVTM_noiIQd5GZKYX6DEarMQCfBc",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "master-40cd2.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "master-40cd2",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "master-40cd2.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "668388767870",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:668388767870:android:65fd7cd456f554dbcc802f",
 };
 
 export const firebaseReady = Object.values(config).every(Boolean);
