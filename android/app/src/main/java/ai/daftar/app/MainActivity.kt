@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         webView = findViewById(R.id.web_view)
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
+        webView.settings.cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
         webView.settings.allowFileAccess = false
         webView.settings.allowContentAccess = false
         webView.webViewClient = object : WebViewClient() {
@@ -59,7 +60,8 @@ class MainActivity : AppCompatActivity() {
         val remoteUrl = BuildConfig.UI_URL.trim()
         if (remoteUrl.isNotEmpty()) {
             remotePageAttempted = true
-            webView.loadUrl(remoteUrl)
+            val separator = if (remoteUrl.contains('?')) '&' else '?'
+            webView.loadUrl("$remoteUrl${separator}ota=${BuildConfig.VERSION_CODE}")
         } else {
             loadLocalApp()
         }
