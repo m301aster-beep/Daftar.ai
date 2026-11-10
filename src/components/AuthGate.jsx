@@ -45,6 +45,27 @@ export default function AuthGate({ children }) {
 
   async function handleFirebaseLogin() {
     setBusy(true); setError("");
+    if (window.AndroidAuth?.signInWithGoogle) {
+      window.__daftarNativeAuth = async (rawPayload) => {
+        try {
+          const payload = typeof rawPayload === "string" ? JSON.parse(rawPayload) : rawPayload;
+          if (payload.error) throw new Error(payload.error);
+          const result = await signInWithFirebase(payload.token, {
+            displayName: payload.user?.name,
+            email: payload.user?.email,
+            photoURL: payload.user?.picture,
+          });
+          setSession(result);
+        } catch (loginError) {
+          setError(loginError.message || "تعذر إكمال تسجيل الدخول عبر Android");
+        } finally {
+          window.__daftarNativeAuth = null;
+          setBusy(false);
+        }
+      };
+      window.AndroidAuth.signInWithGoogle();
+      return;
+    }
     try {
       const result = await signInWithFirebaseGoogle();
       setSession(await signInWithFirebase(result.token, result.user));
