@@ -12,7 +12,20 @@
           "package_name": "ai.daftar.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "668388767870-9888ptfoenruieskc7i80mhh91e6lnb9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ai.daftar.app",
+            "certificate_hash": "1c7cb90f446a9bc3010c325aac63de908df2f83f"
+          }
+        },
+        {
+          "client_id": "668388767870-4bo4i9cugpg1rkc3n7hmti5965dpd68m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDcHUvbVTM_noiIQd5GZKYX6DEarMQCfBc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "668388767870-4bo4i9cugpg1rkc3n7hmti5965dpd68m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
