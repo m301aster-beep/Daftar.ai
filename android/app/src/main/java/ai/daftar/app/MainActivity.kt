@@ -158,6 +158,6 @@ class MainActivity : AppCompatActivity() {
 
     private inner class AndroidAuthBridge {
         @JavascriptInterface
-        fun signInWithGoogle() = runOnUiThread { startNativeGoogleSignIn() }
+        fun signInWithGoogle(@Suppress("UNUSED_PARAMETER") identityJson: String) = runOnUiThread { startNativeGoogleSignIn() }
     }
 }

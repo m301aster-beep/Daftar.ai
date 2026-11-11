@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiConfig, clearSession, decodeGoogleCredential, getSession, signInWithFirebase, signInWithGoogle } from "@/lib/api";
+import { apiConfig, clearSession, decodeGoogleCredential, getSession, saveSession, signInWithFirebase, signInWithGoogle } from "@/lib/api";
 import { TeacherContext } from "@/lib/teacherContext";
 import { firebaseReady, logoutFromFirebase, signInWithFirebaseGoogle } from "@/lib/firebase";
 
@@ -29,12 +29,19 @@ export default function AuthGate({ children }) {
   const [session, setSession] = useState(getSession);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [identity, setIdentity] = useState({ organization: "الكونية", appName: "Daftar AI", teacherName: "", whatsapp: "", contact: "" });
+  const updateIdentity = (key, value) => setIdentity((current) => ({ ...current, [key]: value }));
+  const completeSession = (result) => {
+    const next = { ...result, user: { ...result.user, name: identity.teacherName || result.user?.name, organization: identity.organization, appName: identity.appName, whatsapp: identity.whatsapp, contact: identity.contact } };
+    saveSession(next);
+    setSession(next);
+  };
 
   async function handleCredential(credential) {
     setBusy(true); setError("");
     const profile = decodeGoogleCredential(credential) || {};
     try {
-      setSession(await signInWithGoogle(credential));
+      completeSession(await signInWithGoogle(credential));
     } catch (requestError) {
       setError(`${requestError.message}. تأكد من إعداد Google وCloudflare Worker.`);
       setSession({ token: credential, user: { name: "معلم جديد", email: profile.email || "teacher@example.com", picture: profile.picture || "" }, preview: true });
@@ -48,8 +55,8 @@ export default function AuthGate({ children }) {
         try {
           const payload = typeof rawPayload === "string" ? JSON.parse(rawPayload) : rawPayload;
           if (payload.error) throw new Error(payload.error);
-          const result = await signInWithFirebase(payload.token, { displayName: payload.user?.name, email: payload.user?.email, photoURL: payload.user?.picture });
-          setSession(result);
+          const result = await signInWithFirebase(payload.token, { displayName: payload.user?.name, email: payload.user?.email, photoURL: payload.user?.picture }, identity);
+          completeSession(result);
         } catch (loginError) {
           setError(loginError.message || "تعذر إكمال تسجيل الدخول عبر Android");
         } finally {
@@ -57,17 +64,17 @@ export default function AuthGate({ children }) {
           setBusy(false);
         }
       };
-      window.AndroidAuth.signInWithGoogle();
+      window.AndroidAuth.signInWithGoogle(JSON.stringify(identity));
       return;
     }
     try {
       const result = await signInWithFirebaseGoogle();
-      setSession(await signInWithFirebase(result.token, result.user));
+      completeSession(await signInWithFirebase(result.token, result.user, identity));
     } catch (loginError) { setError(loginError.message); } finally { setBusy(false); }
   }
 
   function usePreview() {
-    const demo = { token: "preview-session", user: { name: "أ. معلم جديد", email: "preview@daftar.ai", picture: "", organization: "الكونية", whatsapp: "", contact: "" }, preview: true };
+    const demo = { token: "preview-session", user: { name: identity.teacherName || "أ. معلم جديد", email: "preview@daftar.ai", picture: "", ...identity }, preview: true };
     localStorage.setItem("daftar-teacher-session", JSON.stringify(demo));
     setSession(demo);
   }
@@ -91,6 +98,11 @@ export default function AuthGate({ children }) {
         <h1 className="mt-3 text-2xl sm:text-3xl font-display font-extrabold">منصة المعلم الذكية</h1>
         <p className="mt-3 text-sm leading-7 text-slate-400">سجّل بحساب Google لإنشاء مساحة تعليمية باسمك وصورتك وبيانات تواصلك.</p>
         {error && <div className="mt-5 rounded-xl border border-amber-400/20 bg-amber-400/10 p-3 text-xs leading-6 text-amber-200">{error}</div>}
+        <div className="mt-6 grid gap-3 text-right">
+          <div className="grid grid-cols-2 gap-3"><label className="text-[11px] text-slate-400">اسم المؤسسة<input value={identity.organization} onChange={(e) => updateIdentity("organization", e.target.value)} className="mt-1 w-full rounded-xl border border-white/10 bg-ink-900/60 px-3 py-2.5 text-sm text-white outline-none focus:border-sky-400/50" /></label><label className="text-[11px] text-slate-400">اسم التطبيق<input value={identity.appName} onChange={(e) => updateIdentity("appName", e.target.value)} className="mt-1 w-full rounded-xl border border-white/10 bg-ink-900/60 px-3 py-2.5 text-sm text-white outline-none focus:border-sky-400/50" /></label></div>
+          <label className="text-[11px] text-slate-400">اسم المعلم<input value={identity.teacherName} onChange={(e) => updateIdentity("teacherName", e.target.value)} className="mt-1 w-full rounded-xl border border-white/10 bg-ink-900/60 px-3 py-2.5 text-sm text-white outline-none focus:border-sky-400/50" placeholder="سيُستخدم اسم Google تلقائيًا إذا تُرك فارغًا" /></label>
+          <div className="grid grid-cols-2 gap-3"><label className="text-[11px] text-slate-400">رقم واتساب<input value={identity.whatsapp} onChange={(e) => updateIdentity("whatsapp", e.target.value)} type="tel" dir="ltr" className="mt-1 w-full rounded-xl border border-white/10 bg-ink-900/60 px-3 py-2.5 text-sm text-white outline-none focus:border-sky-400/50" placeholder="اختياري" /></label><label className="text-[11px] text-slate-400">تواصل آخر<input value={identity.contact} onChange={(e) => updateIdentity("contact", e.target.value)} className="mt-1 w-full rounded-xl border border-white/10 bg-ink-900/60 px-3 py-2.5 text-sm text-white outline-none focus:border-sky-400/50" placeholder="اختياري" /></label></div>
+        </div>
         <div className="mt-7">
           {firebaseReady ? <button onClick={handleFirebaseLogin} disabled={busy} className="w-full flex flex-col items-center justify-center gap-2 rounded-xl bg-white px-4 py-4 text-sm font-bold text-slate-800 transition hover:bg-slate-100 disabled:opacity-60"><GoogleIcon /><span>المتابعة باستخدام Google</span></button> : apiConfig.ready ? <GoogleButton onCredential={handleCredential} /> : <button onClick={usePreview} className="w-full rounded-xl bg-gradient-to-l from-sky-500 to-iris-500 px-4 py-3 text-sm font-bold transition hover:opacity-90">فتح وضع المعاينة</button>}
         </div>

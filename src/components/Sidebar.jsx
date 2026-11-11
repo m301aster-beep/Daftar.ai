@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Sparkles, GraduationCap, X, HelpCircle, Languages, Moon, Sun } from "lucide-react";
+import { Sparkles, GraduationCap, X, HelpCircle, Languages, Moon, Sun, LogOut } from "lucide-react";
 import { navItems } from "@/data/mockData";
 import { getLanguage, setLanguage, translations, getTheme, setTheme } from "@/lib/i18n";
 
@@ -18,7 +18,7 @@ const sectionImages = {
  * الشريط الجانبي للتنقل بين أقسام المنصة.
  * يدعم وضع الموبايل (يُمرّر isOpen + onClose من الأب).
  */
-export default function Sidebar({ active, onSelect, isOpen, onClose }) {
+export default function Sidebar({ active, onSelect, onLogout, isOpen, onClose }) {
   const [language, setCurrentLanguage] = useState(getLanguage);
   const [theme, setCurrentTheme] = useState(getTheme);
   const t = translations[language];
@@ -159,6 +159,11 @@ export default function Sidebar({ active, onSelect, isOpen, onClose }) {
           <button className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 transition">
             <HelpCircle className="w-4 h-4" />
             مركز المساعدة
+          </button>
+
+          <button onClick={onLogout} className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-rose-300 border border-rose-400/10 hover:bg-rose-400/10 transition">
+            <LogOut className="w-4 h-4" />
+            تسجيل الخروج
           </button>
         </div>
       </aside>

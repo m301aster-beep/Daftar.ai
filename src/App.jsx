@@ -107,6 +107,7 @@ function Workspace() {
       <Sidebar
         active={active}
         onSelect={setActive}
+        onLogout={logout}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />

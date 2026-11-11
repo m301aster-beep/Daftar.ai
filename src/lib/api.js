@@ -44,10 +44,10 @@ export async function signInWithGoogle(credential) {
   return saveSession(response);
 }
 
-export async function signInWithFirebase(token, user) {
+export async function signInWithFirebase(token, user, identity = {}) {
   const response = await apiRequest("/api/auth/firebase", {
     method: "POST",
-    body: JSON.stringify({ token, user: { name: user.displayName, email: user.email, picture: user.photoURL } }),
+    body: JSON.stringify({ token, user: { name: user.displayName, email: user.email, picture: user.photoURL, ...identity } }),
   });
   return saveSession(response);
 }
