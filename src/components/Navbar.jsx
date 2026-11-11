@@ -31,7 +31,7 @@ export default function Navbar({ onMenuClick, onSearchClick, title, profile, onL
           <h2 className="font-display font-bold text-base text-white tracking-tight">
             {title}
           </h2>
-          <p className="text-[11px] text-slate-500">مرحباً بعودتك، {profile?.name || "أيها المعلم"}</p>
+          <p className="text-[11px] text-slate-500">{profile?.organization || "الكونية"} · مرحباً {profile?.name || "أيها المعلم"}</p>
         </div>
 
         {/* شريط البحث الفوري */}

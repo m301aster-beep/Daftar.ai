@@ -65,9 +65,9 @@ export default function Sidebar({ active, onSelect, isOpen, onClose }) {
             </div>
             <div className="leading-tight">
               <h1 className="font-display font-extrabold text-base text-white tracking-tight">
-                TeacherAI
+                Daftar AI
               </h1>
-              <p className="text-[11px] text-slate-400 font-medium">منصة المعلم الذكية</p>
+              <p className="text-[11px] text-slate-400 font-medium">الكونية · منصة المعلم الذكية</p>
             </div>
           </div>
           <button
