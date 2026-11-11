@@ -47,7 +47,7 @@ export async function signInWithGoogle(credential) {
 export async function signInWithFirebase(token, user, identity = {}) {
   const response = await apiRequest("/api/auth/firebase", {
     method: "POST",
-    body: JSON.stringify({ token, user: { name: user.displayName, email: user.email, picture: user.photoURL, ...identity } }),
+    body: JSON.stringify({ token, user: { name: identity.teacherName || user.displayName, email: user.email, picture: user.photoURL, ...identity } }),
   });
   return saveSession(response);
 }
