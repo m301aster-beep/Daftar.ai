@@ -36,7 +36,13 @@ class MainActivity : AppCompatActivity() {
                 .addOnSuccessListener { authResult ->
                     val user = authResult.user
                     if (user == null) sendNativeAuthError("تعذر قراءة حساب Google")
-                    else sendNativeAuthSuccess(idToken, user.displayName, user.email, user.photoUrl?.toString())
+                    else user.getIdToken(false)
+                        .addOnSuccessListener { tokenResult ->
+                            val firebaseToken = tokenResult.token
+                            if (firebaseToken.isNullOrBlank()) sendNativeAuthError("تعذر إنشاء Firebase ID Token")
+                            else sendNativeAuthSuccess(firebaseToken, user.displayName, user.email, user.photoUrl?.toString())
+                        }
+                        .addOnFailureListener { error -> sendNativeAuthError(error.message ?: "تعذر إنشاء Firebase ID Token") }
                 }
                 .addOnFailureListener { error -> sendNativeAuthError(error.message ?: "تعذر تسجيل الدخول عبر Firebase") }
         } catch (error: ApiException) {
