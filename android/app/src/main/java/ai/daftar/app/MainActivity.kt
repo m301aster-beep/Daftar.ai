@@ -24,10 +24,6 @@ class MainActivity : AppCompatActivity() {
     private var remotePageAttempted = false
     private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val googleLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode != RESULT_OK) {
-            sendNativeAuthError("تم إلغاء تسجيل الدخول عبر Google")
-            return@registerForActivityResult
-        }
         try {
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 .getResult(ApiException::class.java)
@@ -44,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { error -> sendNativeAuthError(error.message ?: "تعذر تسجيل الدخول عبر Firebase") }
         } catch (error: ApiException) {
-            sendNativeAuthError("Google Sign-In error: ${error.statusCode}")
+            sendNativeAuthError(googleErrorMessage(error.statusCode))
         }
     }
 
@@ -139,6 +135,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendNativeAuthError(message: String) {
         sendToReact(JSONObject().put("error", message).toString())
+    }
+
+    private fun googleErrorMessage(statusCode: Int): String = when (statusCode) {
+        10 -> "DEVELOPER_ERROR (10): تحقق من SHA-1 وSHA-256 وWeb Client ID والحزمة ai.daftar.app في Firebase"
+        7 -> "تعذر الاتصال بخدمات Google. تحقق من الإنترنت ثم حاول مرة أخرى"
+        12501 -> "تم إلغاء اختيار حساب Google"
+        12500 -> "تعذر تسجيل الدخول عبر Google. تحقق من إعداد OAuth في Firebase"
+        else -> "فشل تسجيل Google Native. كود الخطأ: $statusCode"
     }
 
     private fun sendToReact(payload: String) {
