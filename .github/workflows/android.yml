@@ -61,7 +61,8 @@ jobs:
           # PKCS12 stores use the store password for the private key as well.
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          UI_URL: https://daftar-ai.m301aster-beep.pages.dev
+          # Use the bundled WebView assets for a reliable offline-first APK.
+          UI_URL: ""
           VERSION_NAME: ${{ steps.version.outputs.version_name }}
           VERSION_CODE: ${{ steps.version.outputs.version_code }}
         run: gradle assembleRelease bundleRelease --no-daemon
