@@ -65,8 +65,14 @@ class MainActivity : AppCompatActivity() {
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
-        webView.settings.allowFileAccess = false
-        webView.settings.allowContentAccess = false
+        // React is bundled in the APK. These settings are required by WebView
+        // when loading the local module bundle from android_asset.
+        webView.settings.allowFileAccess = true
+        webView.settings.allowContentAccess = true
+        @Suppress("DEPRECATION")
+        webView.settings.allowFileAccessFromFileURLs = true
+        @Suppress("DEPRECATION")
+        webView.settings.allowUniversalAccessFromFileURLs = true
         webView.addJavascriptInterface(AndroidAuthBridge(), "AndroidAuth")
         webView.webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
@@ -127,7 +133,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadLocalApp() {
         remotePageAttempted = false
-        webView.loadUrl("https://appassets.androidplatform.net/assets/web/index.html")
+        // Keep the React UI fully offline inside the APK. The asset-loader URL
+        // remains available for modern WebView versions, while file:// is the
+        // most compatible path for older Android WebView installations.
+        webView.loadUrl("file:///android_asset/web/index.html")
     }
 
     private fun startNativeGoogleSignIn() {
