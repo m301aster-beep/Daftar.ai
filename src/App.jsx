@@ -34,6 +34,7 @@ function Workspace() {
   const [searchOpen, setSearchOpen] = useState(false);
   // أداة مختارة من بطاقة الوصول السريع
   const [selectedTool, setSelectedTool] = useState("exam");
+  const [selectedTeacherTool, setSelectedTeacherTool] = useState(null);
   const [preset, setPreset] = useState(null);
   const [seedTopic, setSeedTopic] = useState("");
   // مفتاح لإجبار الاستوديو على إعادة التهيئة عند تبديل الأداة
@@ -89,6 +90,7 @@ function Workspace() {
   };
 
   const handleOpenTeacherTool = (tool) => {
+    setSelectedTeacherTool(tool);
     if (["exam", "lesson", "worksheet"].includes(tool.id)) {
       handlePickTool({ toolId: tool.id });
       return;
@@ -203,7 +205,7 @@ function Workspace() {
             {/* ====== مركز أدوات المدرس ====== */}
             {active === "tools" && (
               <div className="animate-fade-in-up">
-                <TeacherTools onOpen={handleOpenTeacherTool} language={language} />
+                <TeacherTools onOpen={handleOpenTeacherTool} activeTool={selectedTeacherTool} language={language} />
               </div>
             )}
 
