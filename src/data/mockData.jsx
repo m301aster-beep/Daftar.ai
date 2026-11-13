@@ -2,14 +2,12 @@
 
 // عناصر القائمة الجانبية
 export const navItems = [
-  { id: "dashboard", label: "لوحة التحكم", icon: "LayoutDashboard" },
-  { id: "generator", label: "الاستوديو الذكي", icon: "Sparkles" },
-  { id: "tools", label: "أدوات المدرس", icon: "BrainCircuit" },
+  { id: "dashboard", label: "الرئيسية", icon: "LayoutDashboard" },
+  { id: "generator", label: "الاستوديو", icon: "Sparkles" },
   { id: "students", label: "الطلاب", icon: "Users" },
-  { id: "archive", label: "الأرشيف", icon: "FolderOpen" },
+  { id: "archive", label: "المحفوظات", icon: "FolderOpen" },
   { id: "automation", label: "الأتمتة", icon: "Workflow" },
-  { id: "reports", label: "التقارير", icon: "BarChart3" },
-  { id: "settings", label: "الإعدادات", icon: "Settings" },
+  { id: "settings", label: "البروفايل", icon: "UserRound" },
 ];
 
 // إحصائيات سريعة للوحة التحكم

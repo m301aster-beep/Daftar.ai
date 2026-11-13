@@ -105,6 +105,7 @@ function Workspace() {
       <div className="pointer-events-none fixed inset-0 bg-radial-fade" />
 
       <Sidebar
+        profile={profile}
         active={active}
         onSelect={setActive}
         onLogout={logout}
@@ -130,16 +131,12 @@ function Workspace() {
                   <div className="flex items-center gap-2 mb-1">
                     <Sparkles className="w-4 h-4 text-sky-400" />
                     <span className="text-xs font-bold text-sky-400 uppercase tracking-wider">
-                      مساعدك التعليمي الذكي
+                      اليوم
                     </span>
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-white tracking-tight">
-                    أهلاً بك {profile?.name || "أيها المعلم"} في <span className="gradient-text">TeacherAI Hub</span>
+                    أهلاً {profile?.name || "بك"}
                   </h1>
-                  <p className="text-sm text-slate-400 mt-1.5 max-w-xl">
-                    منصتك الذكية لإعداد الاختبارات، تحضير الدروس، وتصميم الأنشطة — متوافقة مع
-                    المنهج المصري ومعايير وزارة التربية والتعليم.
-                  </p>
                 </div>
 
                 <DashboardStats remoteStats={remoteData.dashboard?.metrics && {
@@ -189,12 +186,8 @@ function Workspace() {
                     </span>
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-white tracking-tight">
-                    مولد المحتوى التعليمي الذكي
+                    الاستوديو الذكي
                   </h1>
-                  <p className="text-sm text-slate-400 mt-1.5 max-w-xl">
-                    اختر الأداة، أدخل بيانات الدرس، واحصل على مخرج جاهز للاستخدام المباشر —
-                    اختبارًا بنموذج إجابة، أو تحضير درس متكامل، أو ورقة عمل منسقة.
-                  </p>
                 </div>
                 <QuickActions onPick={handlePickTool} />
                 <AIStudio
@@ -219,11 +212,8 @@ function Workspace() {
               <div className="space-y-6 animate-fade-in-up">
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-white tracking-tight">
-                    إدارة الطلاب
+                    الطلاب
                   </h1>
-                  <p className="text-sm text-slate-400 mt-1.5">
-                    تتبّع أداء طلابك ودرجات أعمال السنة عبر الاختبارات المختلفة.
-                  </p>
                 </div>
                 <DashboardStats remoteStats={remoteData.dashboard?.metrics && {
                   students: remoteData.dashboard.metrics.students,
@@ -240,11 +230,8 @@ function Workspace() {
               <div className="space-y-6 animate-fade-in-up">
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-white tracking-tight">
-                    أرشيف الدروس والاختبارات
+                    المحفوظات
                   </h1>
-                  <p className="text-sm text-slate-400 mt-1.5">
-                    ابحث في كل ما أنشأته من دروس، اختبارات، وأوراق عمل.
-                  </p>
                 </div>
                 <button
                   onClick={() => setSearchOpen(true)}
@@ -263,11 +250,8 @@ function Workspace() {
               <div className="space-y-6 animate-fade-in-up max-w-3xl">
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-white tracking-tight">
-                    الأتمتة المجدولة
+                    الأتمتة
                   </h1>
-                  <p className="text-sm text-slate-400 mt-1.5">
-                    اجعل المهام المتكررة كإرسال التقارير ومزامنة الدرجات تعمل تلقائياً.
-                  </p>
                 </div>
                 <AutomationPanel />
               </div>
@@ -275,10 +259,9 @@ function Workspace() {
 
             {/* ====== أقسام قيد الإنشاء ====== */}
             {active === "settings" && (
-              <div className="space-y-6 animate-fade-in-up max-w-2xl">
+              <div className="space-y-6 animate-fade-in-up">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-white tracking-tight">إعدادات التطبيق</h1>
-                  <p className="text-sm text-slate-400 mt-1.5">خصص اسمك وصورتك وشعار المساحة التعليمية.</p>
+                  <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-white tracking-tight">بروفايل المعلم</h1>
                 </div>
                 <TeacherProfilePanel />
               </div>
