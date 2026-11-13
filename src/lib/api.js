@@ -52,6 +52,22 @@ export async function signInWithFirebase(token, user, identity = {}) {
   return saveSession(response);
 }
 
+export async function uploadTeacherImage(file, kind = "image") {
+  const session = getSession();
+  if (!session?.token) throw new Error("يجب تسجيل الدخول قبل رفع الصورة");
+  const form = new FormData();
+  form.append("file", file);
+  form.append("kind", kind);
+  const response = await fetch(`${API_URL}/api/media/upload`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${session.token}` },
+    body: form,
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || "تعذر رفع الصورة");
+  return body.url;
+}
+
 export async function loadTeacherData() {
   const [dashboard, students] = await Promise.all([
     apiRequest("/api/dashboard"),

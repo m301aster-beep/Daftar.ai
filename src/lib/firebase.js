@@ -1,6 +1,5 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 
 // Firebase Web settings are public client configuration; env vars override them for staging.
 const config = {
@@ -15,7 +14,6 @@ const config = {
 export const firebaseReady = Object.values(config).every(Boolean);
 const app = firebaseReady ? (getApps().length ? getApp() : initializeApp(config)) : null;
 export const firebaseAuth = app ? getAuth(app) : null;
-export const firebaseStorage = app ? getStorage(app) : null;
 
 export async function signInWithFirebaseGoogle() {
   if (!firebaseAuth) throw new Error("إعدادات Firebase غير مكتملة");
@@ -25,11 +23,4 @@ export async function signInWithFirebaseGoogle() {
 
 export async function logoutFromFirebase() {
   if (firebaseAuth) await signOut(firebaseAuth);
-}
-
-export async function uploadTeacherImage(uid, dataUrl, fileName) {
-  if (!firebaseStorage || !dataUrl) return "";
-  const imageRef = ref(firebaseStorage, `teachers/${uid}/${fileName}`);
-  await uploadString(imageRef, dataUrl, "data_url");
-  return getDownloadURL(imageRef);
 }
