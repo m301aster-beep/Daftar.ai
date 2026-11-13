@@ -1,5 +1,7 @@
 # Firebase Android — Daftar AI
 
+تطبيق Android يستخدم جسرًا أصليًا لفتح حسابات Google، مع واجهة WebView محدثة من Cloudflare Pages ونسخة محلية احتياطية.
+
 تم ربط التطبيق بالحزمة التالية:
 
 ```text

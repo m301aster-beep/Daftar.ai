@@ -57,7 +57,7 @@ jobs:
           # PKCS12 stores use the store password for the private key as well.
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          UI_URL: https://m301aster-beep.github.io/Daftar.ai/
+          UI_URL: https://daftar-ai.m301aster-beep.pages.dev
           VERSION_NAME: ${{ steps.version.outputs.version_name }}
           VERSION_CODE: ${{ steps.version.outputs.version_code }}
         run: gradle assembleRelease bundleRelease --no-daemon
