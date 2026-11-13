@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.webkit.JavascriptInterface
@@ -11,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewFeature
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -21,6 +23,7 @@ import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
+    private lateinit var assetLoader: WebViewAssetLoader
     private var remotePageAttempted = false
     private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val googleLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -56,6 +59,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         webView = findViewById(R.id.web_view)
+        assetLoader = WebViewAssetLoader.Builder()
+            .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
+            .build()
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.cacheMode = android.webkit.WebSettings.LOAD_NO_CACHE
@@ -63,6 +69,11 @@ class MainActivity : AppCompatActivity() {
         webView.settings.allowContentAccess = false
         webView.addJavascriptInterface(AndroidAuthBridge(), "AndroidAuth")
         webView.webViewClient = object : WebViewClient() {
+            override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
+                return assetLoader.shouldInterceptRequest(request.url)
+                    ?: super.shouldInterceptRequest(view, request)
+            }
+
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 return request.url.scheme !in setOf("https", "http", "file", "about")
             }
@@ -116,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadLocalApp() {
         remotePageAttempted = false
-        webView.loadUrl("file:///android_asset/web/index.html")
+        webView.loadUrl("https://appassets.androidplatform.net/assets/web/index.html")
     }
 
     private fun startNativeGoogleSignIn() {
