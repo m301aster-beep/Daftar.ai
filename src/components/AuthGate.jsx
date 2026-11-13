@@ -68,9 +68,12 @@ export default function AuthGate({ children }) {
       return;
     }
     try {
-      const result = await signInWithFirebaseGoogle();
+      const result = await Promise.race([
+        signInWithFirebaseGoogle(),
+        new Promise((_, reject) => window.setTimeout(() => reject(new Error("انتهت مهلة تسجيل الدخول. أغلق نافذة Google إن كانت مفتوحة ثم حاول مرة أخرى.")), 60000)),
+      ]);
       completeSession(await signInWithFirebase(result.token, result.user, identity));
-    } catch (loginError) { setError(loginError.message); } finally { setBusy(false); }
+    } catch (loginError) { setError(loginError.message || "تعذر إكمال التسجيل"); } finally { setBusy(false); }
   }
 
   function usePreview() {

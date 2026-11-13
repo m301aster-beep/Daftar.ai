@@ -24,16 +24,29 @@ export function clearSession() {
 }
 
 export async function apiRequest(path, options = {}) {
+  const { timeoutMs = 30000, signal: externalSignal, ...requestOptions } = options;
   const session = getSession();
   const headers = {
     "content-type": "application/json",
     ...(session?.token ? { Authorization: `Bearer ${session.token}` } : {}),
-    ...(options.headers || {}),
+    ...(requestOptions.headers || {}),
   };
-  const response = await fetch(`${API_URL}${path}`, { ...options, headers });
-  const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(body.error || "تعذر الاتصال بالخادم");
-  return body;
+  const controller = new AbortController();
+  const abortFromExternal = () => controller.abort();
+  externalSignal?.addEventListener("abort", abortFromExternal, { once: true });
+  const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(`${API_URL}${path}`, { ...requestOptions, headers, signal: controller.signal });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.error || "تعذر الاتصال بالخادم");
+    return body;
+  } catch (error) {
+    if (error?.name === "AbortError") throw new Error("انتهت مهلة التسجيل. تحقق من اتصال الخادم وحاول مرة أخرى.");
+    throw error;
+  } finally {
+    window.clearTimeout(timeout);
+    externalSignal?.removeEventListener("abort", abortFromExternal);
+  }
 }
 
 export async function signInWithGoogle(credential) {
@@ -47,6 +60,7 @@ export async function signInWithGoogle(credential) {
 export async function signInWithFirebase(token, user, identity = {}) {
   const response = await apiRequest("/api/auth/firebase", {
     method: "POST",
+    timeoutMs: 60000,
     body: JSON.stringify({ token, user: { name: identity.teacherName || user.displayName, email: user.email, picture: user.photoURL, ...identity } }),
   });
   return saveSession(response);
