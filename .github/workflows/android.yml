@@ -61,8 +61,8 @@ jobs:
           # PKCS12 stores use the store password for the private key as well.
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          # Use the bundled WebView assets for a reliable offline-first APK.
-          UI_URL: ""
+          # Load the live React UI for OTA updates; bundled assets remain the offline fallback.
+          UI_URL: "https://daftar-ai.pages.dev"
           VERSION_NAME: ${{ steps.version.outputs.version_name }}
           VERSION_CODE: ${{ steps.version.outputs.version_code }}
         run: gradle assembleRelease bundleRelease --no-daemon

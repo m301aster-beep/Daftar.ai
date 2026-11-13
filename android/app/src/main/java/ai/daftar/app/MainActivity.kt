@@ -110,7 +110,9 @@ class MainActivity : AppCompatActivity() {
             WebSettingsCompat.setForceDark(webView.settings, WebSettingsCompat.FORCE_DARK_OFF)
         }
 
-        val remoteUrl = BuildConfig.UI_URL.trim()
+        // OTA-first: future React updates arrive from Pages without rebuilding the APK.
+        // The bundled React app remains the offline fallback when the remote page fails.
+        val remoteUrl = BuildConfig.UI_URL.trim().ifEmpty { "https://daftar-ai.pages.dev" }
         if (remoteUrl.isNotEmpty()) {
             remotePageAttempted = true
             val separator = if (remoteUrl.contains('?')) '&' else '?'
